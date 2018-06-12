@@ -1,7 +1,10 @@
 package interfaces;
 
 
+import entities.Archtypes;
+import entities.Creature;
 import java.util.ArrayList;
+import javax.ws.rs.Path;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,8 +18,9 @@ import java.util.ArrayList;
  */
 public interface GetCreatureDataInterface {
     
-    
+  
     public  ArrayList<String> getCreatureTypes();
-    public ArrayList<Creature> getCreaturesByType();
+    public ArrayList<Creature> getCreaturesByType(String creatureType);
+    public ArrayList<Archtypes> getArchtypesByCreature(String creatureID);
     
 }
