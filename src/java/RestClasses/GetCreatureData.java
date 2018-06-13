@@ -9,15 +9,23 @@ import entities.Archtypes;
 import entities.Creature;
 import interfaces.GetCreatureDataInterface;
 import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author aejan
  */
 public class GetCreatureData implements  GetCreatureDataInterface{
-
+//inject Entity Manager
+    @PersistenceContext(unitName = "LARPPU") 
+    private EntityManager entityManager;
+    
+    
     @Override
     public ArrayList<String> getCreatureTypes() {
+        
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
