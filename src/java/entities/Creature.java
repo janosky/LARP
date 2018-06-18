@@ -10,8 +10,8 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Creature.findAll", query = "SELECT c FROM Creature c")
-    , @NamedQuery(name = "Creature.findByCreatureId", query = "SELECT c FROM Creature c WHERE c.creatureId = :creatureId")
+    , @NamedQuery(name = "Creature.findByCreatureId", query = "SELECT c FROM Creature c WHERE c.creaturePK.creatureId = :creatureId")
+    , @NamedQuery(name = "Creature.findByScenarioId", query = "SELECT c FROM Creature c WHERE c.creaturePK.scenarioId = :scenarioId")
     , @NamedQuery(name = "Creature.findByCreatureName", query = "SELECT c FROM Creature c WHERE c.creatureName = :creatureName")
     , @NamedQuery(name = "Creature.findByCreatureType", query = "SELECT c FROM Creature c WHERE c.creatureType = :creatureType")
     , @NamedQuery(name = "Creature.findByFrequency", query = "SELECT c FROM Creature c WHERE c.frequency = :frequency")
@@ -46,12 +47,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Creature implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 5)
-    @Column(name = "CREATURE_ID")
-    private String creatureId;
+    @EmbeddedId
+    protected CreaturePK creaturePK;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 25)
@@ -71,46 +68,50 @@ public class Creature implements Serializable {
     @Size(max = 25)
     @Column(name = "TERRAIN")
     private String terrain;
-    @Size(max = 100)
+    @Size(max = 300)
     @Column(name = "DESCRIPTION")
     private String description;
-    @Size(max = 100)
+    @Size(max = 300)
     @Column(name = "BACKGROUND")
     private String background;
-    @Size(max = 100)
+    @Size(max = 300)
     @Column(name = "ROLEPLAY")
     private String roleplay;
-    @Size(max = 100)
+    @Size(max = 300)
     @Column(name = "SPECIAL_ATTACKS")
     private String specialAttacks;
-    @Size(max = 100)
+    @Size(max = 300)
     @Column(name = "SPECIAL_DEFENSES")
     private String specialDefenses;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "creatureId")
     private Collection<Archtypes> archtypesCollection;
-    @JoinColumn(name = "SCENARIO_ID", referencedColumnName = "SCENARIO_ID")
+    @JoinColumn(name = "SCENARIO_ID", referencedColumnName = "SCENARIO_ID", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Scenario scenarioId;
+    private Scenario scenario;
 
     public Creature() {
     }
 
-    public Creature(String creatureId) {
-        this.creatureId = creatureId;
+    public Creature(CreaturePK creaturePK) {
+        this.creaturePK = creaturePK;
     }
 
-    public Creature(String creatureId, String creatureName, String creatureType) {
-        this.creatureId = creatureId;
+    public Creature(CreaturePK creaturePK, String creatureName, String creatureType) {
+        this.creaturePK = creaturePK;
         this.creatureName = creatureName;
         this.creatureType = creatureType;
     }
 
-    public String getCreatureId() {
-        return creatureId;
+    public Creature(String creatureId, String scenarioId) {
+        this.creaturePK = new CreaturePK(creatureId, scenarioId);
     }
 
-    public void setCreatureId(String creatureId) {
-        this.creatureId = creatureId;
+    public CreaturePK getCreaturePK() {
+        return creaturePK;
+    }
+
+    public void setCreaturePK(CreaturePK creaturePK) {
+        this.creaturePK = creaturePK;
     }
 
     public String getCreatureName() {
@@ -202,18 +203,18 @@ public class Creature implements Serializable {
         this.archtypesCollection = archtypesCollection;
     }
 
-    public Scenario getScenarioId() {
-        return scenarioId;
+    public Scenario getScenario() {
+        return scenario;
     }
 
-    public void setScenarioId(Scenario scenarioId) {
-        this.scenarioId = scenarioId;
+    public void setScenario(Scenario scenario) {
+        this.scenario = scenario;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (creatureId != null ? creatureId.hashCode() : 0);
+        hash += (creaturePK != null ? creaturePK.hashCode() : 0);
         return hash;
     }
 
@@ -224,7 +225,7 @@ public class Creature implements Serializable {
             return false;
         }
         Creature other = (Creature) object;
-        if ((this.creatureId == null && other.creatureId != null) || (this.creatureId != null && !this.creatureId.equals(other.creatureId))) {
+        if ((this.creaturePK == null && other.creaturePK != null) || (this.creaturePK != null && !this.creaturePK.equals(other.creaturePK))) {
             return false;
         }
         return true;
@@ -232,7 +233,7 @@ public class Creature implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Creature[ creatureId=" + creatureId + " ]";
+        return "entities.Creature[ creaturePK=" + creaturePK + " ]";
     }
     
 }

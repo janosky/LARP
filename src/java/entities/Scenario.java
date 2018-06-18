@@ -45,12 +45,12 @@ public class Scenario implements Serializable {
     @Size(min = 1, max = 5)
     @Column(name = "SCENARIO_ID")
     private String scenarioId;
-    @Size(max = 100)
+    @Size(max = 300)
     @Column(name = "SCENARIO_NOTES")
     private String scenarioNotes;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 300)
     @Column(name = "SCENARIO_CREATED")
     private String scenarioCreated;
     @Basic(optional = false)
@@ -58,13 +58,13 @@ public class Scenario implements Serializable {
     @Size(min = 1, max = 25)
     @Column(name = "SCENARIO_CREATED_BY")
     private String scenarioCreatedBy;
-    @Size(max = 100)
+    @Size(max = 300)
     @Column(name = "GM_NOTES")
     private String gmNotes;
-    @Size(max = 100)
+    @Size(max = 300)
     @Column(name = "IS_CUSTOM")
     private String isCustom;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "scenarioId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "scenario")
     private Collection<Creature> creatureCollection;
 
     public Scenario() {

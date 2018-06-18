@@ -75,7 +75,7 @@ public class Archtypes implements Serializable {
     @Size(max = 25)
     @Column(name = "DAMAGE")
     private String damage;
-    @Size(max = 100)
+    @Size(max = 300)
     @Column(name = "DESCRIPTION")
     private String description;
     @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID")
