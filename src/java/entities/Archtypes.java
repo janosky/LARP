@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -78,7 +79,9 @@ public class Archtypes implements Serializable {
     @Size(max = 300)
     @Column(name = "DESCRIPTION")
     private String description;
-    @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID")
+    @JoinColumns({
+    @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID"),
+    @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID") })
     @ManyToOne(optional = false)
     private Creature creatureId;
 

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : index
-    Created on : May 21, 2018, 7:47:25 PM
+    Document   : newjsp
+    Created on : Jun 27, 2018, 11:56:18 AM
     Author     : aejan
 --%>
 
@@ -14,6 +14,6 @@
     <body>
         <h1>Hello World!</h1>
         
-         <a href="testGetCreatureType">test</a>
+       
     </body>
 </html>

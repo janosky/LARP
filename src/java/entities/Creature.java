@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Creature.findByBackground", query = "SELECT c FROM Creature c WHERE c.background = :background")
     , @NamedQuery(name = "Creature.findByRoleplay", query = "SELECT c FROM Creature c WHERE c.roleplay = :roleplay")
     , @NamedQuery(name = "Creature.findBySpecialAttacks", query = "SELECT c FROM Creature c WHERE c.specialAttacks = :specialAttacks")
+     //    , @NamedQuery(name = "Creature.getCreatureTypes", query = "SELECT Creature_Type FROM Creature c")
     , @NamedQuery(name = "Creature.findBySpecialDefenses", query = "SELECT c FROM Creature c WHERE c.specialDefenses = :specialDefenses")})
 public class Creature implements Serializable {
 
