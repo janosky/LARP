@@ -31,6 +31,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(RestClasses.ArchtypesFacadeREST.class);
         resources.add(RestClasses.CreatureFacadeREST.class);
+        resources.add(RestClasses.GetCreatureData.class);
         resources.add(RestClasses.ScenarioFacadeREST.class);
     }
     

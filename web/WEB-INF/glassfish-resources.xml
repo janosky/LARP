@@ -12,4 +12,5 @@
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="java:app/LARPDB" object-type="user" pool-name="mysql_larp_db_rootPool"/>
     <jdbc-resource enabled="true" jndi-name="java:app/LARP" object-type="user" pool-name="mysql_larp_db_rootPool"/>
+    <jdbc-resource enabled="true" jndi-name="java:app/LARPDBKNOWN" object-type="user" pool-name="mysql_larp_db_rootPool"/>
 </resources>
