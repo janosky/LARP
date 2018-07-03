@@ -6,10 +6,12 @@
 package RestClasses;
 
 import entities.Creature;
+import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,12 +27,32 @@ import javax.ws.rs.core.MediaType;
  * @author aejan
  */
 @Stateless
-@Path("entities.creature")
+@Path("entities/creature")
 public class CreatureFacadeREST extends AbstractFacade<Creature> {
 
     @PersistenceContext(unitName = "LARPPU")
     private EntityManager em;
 
+    @GET 
+    @Path("getCreatureTypes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Creature> getCreatureTypes() {
+      TypedQuery<Creature> query = em.createNamedQuery("Creature.findAll",Creature.class);
+       
+    //    Query query = entityManager.createNativeQuery("SELECT c FROM Creature c", Creature.class);
+        
+        List<Creature> creatures = query.getResultList();
+        
+       List<String> creatureTypes = new LinkedList<>();
+       
+       while(!creatures.isEmpty())
+       {
+           creatureTypes.add(creatures.remove(0).getCreatureType());
+       }
+               
+        return creatures;
+      //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     public CreatureFacadeREST() {
         super(Creature.class);
     }

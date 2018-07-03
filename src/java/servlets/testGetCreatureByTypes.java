@@ -5,13 +5,11 @@
  */
 package servlets;
 
-import RestClasses.GetCreatureData;
-import entities.Creature;
 import RestClasses.GetCreatureDataInterface;
+import entities.Creature;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author aejan
  */
-public class testGetCreatureType extends HttpServlet {
+public class testGetCreatureByTypes extends HttpServlet {
 @Inject
 GetCreatureDataInterface creatureData;
     /**
@@ -36,28 +34,26 @@ GetCreatureDataInterface creatureData;
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-     
         response.setContentType("text/html;charset=UTF-8");
         
-          List<String> types = creatureData.getCreatureTypes();
+        List<Creature> creatures = creatureData.getCreaturesByType("Humanoid");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet testGetCreatureType</title>");            
+            out.println("<title>Servlet testGetCreatureByTypes</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet testGetCreatureType at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet testGetCreatureByTypes at " + request.getContextPath() + "</h1>");
             out.print("<p>");
-            while(!(types.isEmpty()))
+            Creature tempCreature;
+            while(!(creatures.isEmpty()))
             {
-                out.println(types.remove(0));
+                tempCreature = creatures.remove(0);
+                out.println(tempCreature.getCreatureName()+" "+ tempCreature.getDescription());
             }
              out.print("</p>");
-                
-                       
             out.println("</body>");
             out.println("</html>");
         }

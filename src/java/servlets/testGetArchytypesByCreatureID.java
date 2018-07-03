@@ -5,13 +5,12 @@
  */
 package servlets;
 
-import RestClasses.GetCreatureData;
-import entities.Creature;
 import RestClasses.GetCreatureDataInterface;
+import entities.Archtypes;
+import entities.Creature;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,9 +21,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author aejan
  */
-public class testGetCreatureType extends HttpServlet {
+public class testGetArchytypesByCreatureID extends HttpServlet {
 @Inject
-GetCreatureDataInterface creatureData;
+GetCreatureDataInterface archtypes;
+@Inject
+Creature creatures;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,11 +37,9 @@ GetCreatureDataInterface creatureData;
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-     
-        response.setContentType("text/html;charset=UTF-8");
-        
-          List<String> types = creatureData.getCreatureTypes();
+              response.setContentType("text/html;charset=UTF-8");
+        Creature testCreature = archtypes.getCreatureByID("C0005");
+          List<Archtypes> types = archtypes.getArchtypesByCreature("c005");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");

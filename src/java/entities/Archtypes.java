@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Archtypes.findAll", query = "SELECT a FROM Archtypes a")
     , @NamedQuery(name = "Archtypes.findByArchytypeId", query = "SELECT a FROM Archtypes a WHERE a.archytypeId = :archytypeId")
+    ,  @NamedQuery(name = "Archtypes.findCreatureID", query = "SELECT a FROM Archtypes a WHERE a.creatureId = :creatureId")
     , @NamedQuery(name = "Archtypes.findByArchytyeClass", query = "SELECT a FROM Archtypes a WHERE a.archytyeClass = :archytyeClass")
     , @NamedQuery(name = "Archtypes.findByHitPoints", query = "SELECT a FROM Archtypes a WHERE a.hitPoints = :hitPoints")
     , @NamedQuery(name = "Archtypes.findByHtP", query = "SELECT a FROM Archtypes a WHERE a.htP = :htP")
@@ -48,6 +49,7 @@ public class Archtypes implements Serializable {
     @Size(min = 1, max = 5)
     @Column(name = "ARCHYTYPE_ID")
     private String archytypeId;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 25)
@@ -79,8 +81,10 @@ public class Archtypes implements Serializable {
     @Size(max = 300)
     @Column(name = "DESCRIPTION")
     private String description;
-    @JoinColumns({
-    @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID"),
+    @Size(max = 5)
+   // @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID")
+   @JoinColumns({
+   @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID"),
     @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID") })
     @ManyToOne(optional = false)
     private Creature creatureId;

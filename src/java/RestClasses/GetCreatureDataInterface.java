@@ -1,4 +1,4 @@
-package interfaces;
+package RestClasses;
 
 
 import entities.Archtypes;
@@ -21,7 +21,7 @@ public interface GetCreatureDataInterface {
     
   
     public  List<String> getCreatureTypes();
-    public ArrayList<Creature> getCreaturesByType(String creatureType);
-    public ArrayList<Archtypes> getArchtypesByCreature(String creatureID);
-    
+    public List<Creature> getCreaturesByType(String creatureType);
+    public List<Archtypes> getArchtypesByCreature(String creatureID);
+    public Creature getCreatureByID(String creatureID);
 }

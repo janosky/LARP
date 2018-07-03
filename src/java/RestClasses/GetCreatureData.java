@@ -8,7 +8,6 @@ package RestClasses;
 import entities.Archtypes;
 import entities.Creature;
 import entities.Creature_;
-import interfaces.GetCreatureDataInterface;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +23,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
  *
@@ -34,19 +35,21 @@ import javax.ws.rs.Produces;
 
 @Stateless
 @Path("getCreatureData")
-@LocalBean
-public class GetCreatureData implements  GetCreatureDataInterface{
+//@LocalBean
+public class GetCreatureData  implements  GetCreatureDataInterface  {
 //inject Entity Manager
- // @PersistenceContext(unitName = "LARPPU") 
-    String puName = "LARPPU";
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory(puName);
-    private EntityManager entityManager = emf.createEntityManager();
     
+    public static final String PU_NAME = "LARPPU";
+ @PersistenceContext(unitName = PU_NAME) 
+  protected EntityManager entityManager;
+   // EntityManagerFactory emf = Persistence.createEntityManagerFactory(puName);
+  //  private EntityManager entityManager = emf.createEntityManager();
+    Class resultClass;
     
     @Override
     @GET 
     @Path("getCreatureTypes")
-    @Produces("application/json")
+    @Produces(MediaType.TEXT_PLAIN)
     public List<String> getCreatureTypes() {
       TypedQuery<Creature> query = entityManager.createNamedQuery("Creature.findAll",Creature.class);
        
@@ -54,7 +57,7 @@ public class GetCreatureData implements  GetCreatureDataInterface{
         
         List<Creature> creatures = query.getResultList();
         
-       List<String> creatureTypes = new LinkedList<>();
+       LinkedList<String> creatureTypes = new LinkedList<>();
        
        while(!creatures.isEmpty())
        {
@@ -66,14 +69,26 @@ public class GetCreatureData implements  GetCreatureDataInterface{
     }
 
     @Override
-    public ArrayList<Creature> getCreaturesByType(String creatureType) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @GET 
+    @Path("getCreatureByType/{type}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public List<Creature> getCreaturesByType(@PathParam("type") String creatureType) {
+     return entityManager.createNamedQuery("Creature.findByCreatureType", Creature.class).setParameter("creatureType", creatureType).getResultList();
+      
+        
+      // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public ArrayList<Archtypes> getArchtypesByCreature(String creatureID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Creature getCreatureByID(String creatureID) {
+        return entityManager.createNamedQuery("Creature.findByCreatureId",Creature.class).setParameter("creatureId", creatureID).getSingleResult();
     }
+
+    @Override
+    public List<Archtypes> getArchtypesByCreature(String creatureID) {
+        return entityManager.createNamedQuery("Archtypes.findCreatureID", Archtypes.class).setParameter("creatureId", creatureID).getResultList();
+    }
+    
     
     
     

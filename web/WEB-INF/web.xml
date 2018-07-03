@@ -4,9 +4,25 @@
         <servlet-name>testGetCreatureType</servlet-name>
         <servlet-class>servlets.testGetCreatureType</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>testGetCreatureByTypes</servlet-name>
+        <servlet-class>servlets.testGetCreatureByTypes</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>testGetArchytypesByCreatureID</servlet-name>
+        <servlet-class>servlets.testGetArchytypesByCreatureID</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>testGetCreatureType</servlet-name>
         <url-pattern>/testGetCreatureType</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>testGetCreatureByTypes</servlet-name>
+        <url-pattern>/testGetCreatureByTypes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>testGetArchytypesByCreatureID</servlet-name>
+        <url-pattern>/testGetArchytypesByCreatureID</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
