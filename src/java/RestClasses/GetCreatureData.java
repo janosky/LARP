@@ -49,7 +49,7 @@ public class GetCreatureData  implements  GetCreatureDataInterface  {
     @Override
     @GET 
     @Path("getCreatureTypes")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<String> getCreatureTypes() {
       TypedQuery<Creature> query = entityManager.createNamedQuery("Creature.findAll",Creature.class);
        
@@ -68,6 +68,17 @@ public class GetCreatureData  implements  GetCreatureDataInterface  {
       //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+     
+    @GET 
+    @Path("String")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String helloWorld() {
+    // return entityManager.createNamedQuery("Creature.findByCreatureType", Creature.class).setParameter("creatureType", creatureType).getResultList();
+      return "HelloWorld";
+        
+      // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     @Override
     @GET 
     @Path("getCreatureByType/{type}")
