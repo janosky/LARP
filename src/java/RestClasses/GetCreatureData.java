@@ -8,6 +8,7 @@ package RestClasses;
 import entities.Archtypes;
 import entities.Creature;
 import entities.Creature_;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,10 +34,10 @@ import javax.ws.rs.core.MediaType;
  */
 
 
-@Stateless
+
 @Path("getCreatureData")
 //@LocalBean
-public class GetCreatureData  implements  GetCreatureDataInterface  {
+public class GetCreatureData  implements  GetCreatureDataInterface , Serializable {
 //inject Entity Manager
     
     public static final String PU_NAME = "LARPPU";
@@ -49,7 +50,7 @@ public class GetCreatureData  implements  GetCreatureDataInterface  {
     @Override
     @GET 
     @Path("getCreatureTypes")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_HTML})
     public List<String> getCreatureTypes() {
       TypedQuery<Creature> query = entityManager.createNamedQuery("Creature.findAll",Creature.class);
        
@@ -82,7 +83,7 @@ public class GetCreatureData  implements  GetCreatureDataInterface  {
     @Override
     @GET 
     @Path("getCreatureByType/{type}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_XML)
     public List<Creature> getCreaturesByType(@PathParam("type") String creatureType) {
      return entityManager.createNamedQuery("Creature.findByCreatureType", Creature.class).setParameter("creatureType", creatureType).getResultList();
       
