@@ -10,10 +10,8 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -32,24 +30,25 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Creature.findAll", query = "SELECT c FROM Creature c")
-    , @NamedQuery(name = "Creature.findByCreatureId", query = "SELECT c FROM Creature c WHERE c.creaturePK.creatureId = :creatureId")
-    , @NamedQuery(name = "Creature.findByScenarioId", query = "SELECT c FROM Creature c WHERE c.creaturePK.scenarioId = :scenarioId")
+    , @NamedQuery(name = "Creature.findByCreatureId", query = "SELECT c FROM Creature c WHERE c.creatureId = :creatureId")
     , @NamedQuery(name = "Creature.findByCreatureName", query = "SELECT c FROM Creature c WHERE c.creatureName = :creatureName")
     , @NamedQuery(name = "Creature.findByCreatureType", query = "SELECT c FROM Creature c WHERE c.creatureType = :creatureType")
-    , @NamedQuery(name = "Creature.findByFrequency", query = "SELECT c FROM Creature c WHERE c.frequency = :frequency")
-    , @NamedQuery(name = "Creature.findByRandomMonster", query = "SELECT c FROM Creature c WHERE c.randomMonster = :randomMonster")
-    , @NamedQuery(name = "Creature.findByTerrain", query = "SELECT c FROM Creature c WHERE c.terrain = :terrain")
-    , @NamedQuery(name = "Creature.findByDescription", query = "SELECT c FROM Creature c WHERE c.description = :description")
-    , @NamedQuery(name = "Creature.findByBackground", query = "SELECT c FROM Creature c WHERE c.background = :background")
-    , @NamedQuery(name = "Creature.findByRoleplay", query = "SELECT c FROM Creature c WHERE c.roleplay = :roleplay")
-    , @NamedQuery(name = "Creature.findBySpecialAttacks", query = "SELECT c FROM Creature c WHERE c.specialAttacks = :specialAttacks")
-  
-    , @NamedQuery(name = "Creature.findBySpecialDefenses", query = "SELECT c FROM Creature c WHERE c.specialDefenses = :specialDefenses")})
+    , @NamedQuery(name = "Creature.findByCreatureFrequency", query = "SELECT c FROM Creature c WHERE c.creatureFrequency = :creatureFrequency")
+    , @NamedQuery(name = "Creature.findByCreatureRandomMonster", query = "SELECT c FROM Creature c WHERE c.creatureRandomMonster = :creatureRandomMonster")
+    , @NamedQuery(name = "Creature.findByCreatureTerrain", query = "SELECT c FROM Creature c WHERE c.creatureTerrain = :creatureTerrain")
+    , @NamedQuery(name = "Creature.findByCreatureDescription", query = "SELECT c FROM Creature c WHERE c.creatureDescription = :creatureDescription")
+    , @NamedQuery(name = "Creature.findByCreatureBackground", query = "SELECT c FROM Creature c WHERE c.creatureBackground = :creatureBackground")
+    , @NamedQuery(name = "Creature.findByCreatureSpecialAttacks", query = "SELECT c FROM Creature c WHERE c.creatureSpecialAttacks = :creatureSpecialAttacks")
+    , @NamedQuery(name = "Creature.findByCreatureSpecialDefenses", query = "SELECT c FROM Creature c WHERE c.creatureSpecialDefenses = :creatureSpecialDefenses")})
 public class Creature implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected CreaturePK creaturePK;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 5)
+    @Column(name = "CREATURE_ID")
+    private String creatureId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 25)
@@ -61,58 +60,50 @@ public class Creature implements Serializable {
     @Column(name = "CREATURE_TYPE")
     private String creatureType;
     @Size(max = 10)
-    @Column(name = "FREQUENCY")
-    private String frequency;
-    @Size(max = 3)
-    @Column(name = "RANDOM_MONSTER")
-    private String randomMonster;
+    @Column(name = "CREATURE_FREQUENCY")
+    private String creatureFrequency;
+    @Size(max = 15)
+    @Column(name = "CREATURE_RANDOM_MONSTER")
+    private String creatureRandomMonster;
     @Size(max = 25)
-    @Column(name = "TERRAIN")
-    private String terrain;
+    @Column(name = "CREATURE_TERRAIN")
+    private String creatureTerrain;
     @Size(max = 300)
-    @Column(name = "DESCRIPTION")
-    private String description;
+    @Column(name = "CREATURE_DESCRIPTION")
+    private String creatureDescription;
     @Size(max = 300)
-    @Column(name = "BACKGROUND")
-    private String background;
+    @Column(name = "CREATURE_BACKGROUND")
+    private String creatureBackground;
     @Size(max = 300)
-    @Column(name = "ROLEPLAY")
-    private String roleplay;
+    @Column(name = "CREATURE_SPECIAL_ATTACKS")
+    private String creatureSpecialAttacks;
     @Size(max = 300)
-    @Column(name = "SPECIAL_ATTACKS")
-    private String specialAttacks;
-    @Size(max = 300)
-    @Column(name = "SPECIAL_DEFENSES")
-    private String specialDefenses;
+    @Column(name = "CREATURE_SPECIAL_DEFENSES")
+    private String creatureSpecialDefenses;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "creatureId")
     private Collection<Archtypes> archtypesCollection;
-    @JoinColumn(name = "SCENARIO_ID", referencedColumnName = "SCENARIO_ID", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Scenario scenario;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creatureId")
+    private Collection<ScenarioDetails> scenarioDetailsCollection;
 
     public Creature() {
     }
 
-    public Creature(CreaturePK creaturePK) {
-        this.creaturePK = creaturePK;
+    public Creature(String creatureId) {
+        this.creatureId = creatureId;
     }
 
-    public Creature(CreaturePK creaturePK, String creatureName, String creatureType) {
-        this.creaturePK = creaturePK;
+    public Creature(String creatureId, String creatureName, String creatureType) {
+        this.creatureId = creatureId;
         this.creatureName = creatureName;
         this.creatureType = creatureType;
     }
 
-    public Creature(String creatureId, String scenarioId) {
-        this.creaturePK = new CreaturePK(creatureId, scenarioId);
+    public String getCreatureId() {
+        return creatureId;
     }
 
-    public CreaturePK getCreaturePK() {
-        return creaturePK;
-    }
-
-    public void setCreaturePK(CreaturePK creaturePK) {
-        this.creaturePK = creaturePK;
+    public void setCreatureId(String creatureId) {
+        this.creatureId = creatureId;
     }
 
     public String getCreatureName() {
@@ -131,68 +122,60 @@ public class Creature implements Serializable {
         this.creatureType = creatureType;
     }
 
-    public String getFrequency() {
-        return frequency;
+    public String getCreatureFrequency() {
+        return creatureFrequency;
     }
 
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
+    public void setCreatureFrequency(String creatureFrequency) {
+        this.creatureFrequency = creatureFrequency;
     }
 
-    public String getRandomMonster() {
-        return randomMonster;
+    public String getCreatureRandomMonster() {
+        return creatureRandomMonster;
     }
 
-    public void setRandomMonster(String randomMonster) {
-        this.randomMonster = randomMonster;
+    public void setCreatureRandomMonster(String creatureRandomMonster) {
+        this.creatureRandomMonster = creatureRandomMonster;
     }
 
-    public String getTerrain() {
-        return terrain;
+    public String getCreatureTerrain() {
+        return creatureTerrain;
     }
 
-    public void setTerrain(String terrain) {
-        this.terrain = terrain;
+    public void setCreatureTerrain(String creatureTerrain) {
+        this.creatureTerrain = creatureTerrain;
     }
 
-    public String getDescription() {
-        return description;
+    public String getCreatureDescription() {
+        return creatureDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCreatureDescription(String creatureDescription) {
+        this.creatureDescription = creatureDescription;
     }
 
-    public String getBackground() {
-        return background;
+    public String getCreatureBackground() {
+        return creatureBackground;
     }
 
-    public void setBackground(String background) {
-        this.background = background;
+    public void setCreatureBackground(String creatureBackground) {
+        this.creatureBackground = creatureBackground;
     }
 
-    public String getRoleplay() {
-        return roleplay;
+    public String getCreatureSpecialAttacks() {
+        return creatureSpecialAttacks;
     }
 
-    public void setRoleplay(String roleplay) {
-        this.roleplay = roleplay;
+    public void setCreatureSpecialAttacks(String creatureSpecialAttacks) {
+        this.creatureSpecialAttacks = creatureSpecialAttacks;
     }
 
-    public String getSpecialAttacks() {
-        return specialAttacks;
+    public String getCreatureSpecialDefenses() {
+        return creatureSpecialDefenses;
     }
 
-    public void setSpecialAttacks(String specialAttacks) {
-        this.specialAttacks = specialAttacks;
-    }
-
-    public String getSpecialDefenses() {
-        return specialDefenses;
-    }
-
-    public void setSpecialDefenses(String specialDefenses) {
-        this.specialDefenses = specialDefenses;
+    public void setCreatureSpecialDefenses(String creatureSpecialDefenses) {
+        this.creatureSpecialDefenses = creatureSpecialDefenses;
     }
 
     @XmlTransient
@@ -204,18 +187,19 @@ public class Creature implements Serializable {
         this.archtypesCollection = archtypesCollection;
     }
 
-    public Scenario getScenario() {
-        return scenario;
+    @XmlTransient
+    public Collection<ScenarioDetails> getScenarioDetailsCollection() {
+        return scenarioDetailsCollection;
     }
 
-    public void setScenario(Scenario scenario) {
-        this.scenario = scenario;
+    public void setScenarioDetailsCollection(Collection<ScenarioDetails> scenarioDetailsCollection) {
+        this.scenarioDetailsCollection = scenarioDetailsCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (creaturePK != null ? creaturePK.hashCode() : 0);
+        hash += (creatureId != null ? creatureId.hashCode() : 0);
         return hash;
     }
 
@@ -226,7 +210,7 @@ public class Creature implements Serializable {
             return false;
         }
         Creature other = (Creature) object;
-        if ((this.creaturePK == null && other.creaturePK != null) || (this.creaturePK != null && !this.creaturePK.equals(other.creaturePK))) {
+        if ((this.creatureId == null && other.creatureId != null) || (this.creatureId != null && !this.creatureId.equals(other.creatureId))) {
             return false;
         }
         return true;
@@ -234,7 +218,7 @@ public class Creature implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Creature[ creaturePK=" + creaturePK + " ]";
+        return "entities.Creature[ creatureId=" + creatureId + " ]";
     }
     
 }

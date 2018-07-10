@@ -33,9 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Scenario.findByScenarioId", query = "SELECT s FROM Scenario s WHERE s.scenarioId = :scenarioId")
     , @NamedQuery(name = "Scenario.findByScenarioNotes", query = "SELECT s FROM Scenario s WHERE s.scenarioNotes = :scenarioNotes")
     , @NamedQuery(name = "Scenario.findByScenarioCreated", query = "SELECT s FROM Scenario s WHERE s.scenarioCreated = :scenarioCreated")
-    , @NamedQuery(name = "Scenario.findByScenarioCreatedBy", query = "SELECT s FROM Scenario s WHERE s.scenarioCreatedBy = :scenarioCreatedBy")
-    , @NamedQuery(name = "Scenario.findByGmNotes", query = "SELECT s FROM Scenario s WHERE s.gmNotes = :gmNotes")
-    , @NamedQuery(name = "Scenario.findByIsCustom", query = "SELECT s FROM Scenario s WHERE s.isCustom = :isCustom")})
+    , @NamedQuery(name = "Scenario.findByScenarioCreatedBy", query = "SELECT s FROM Scenario s WHERE s.scenarioCreatedBy = :scenarioCreatedBy")})
 public class Scenario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -58,14 +56,8 @@ public class Scenario implements Serializable {
     @Size(min = 1, max = 25)
     @Column(name = "SCENARIO_CREATED_BY")
     private String scenarioCreatedBy;
-    @Size(max = 300)
-    @Column(name = "GM_NOTES")
-    private String gmNotes;
-    @Size(max = 300)
-    @Column(name = "IS_CUSTOM")
-    private String isCustom;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "scenario")
-    private Collection<Creature> creatureCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "scenarioId")
+    private Collection<ScenarioDetails> scenarioDetailsCollection;
 
     public Scenario() {
     }
@@ -112,29 +104,13 @@ public class Scenario implements Serializable {
         this.scenarioCreatedBy = scenarioCreatedBy;
     }
 
-    public String getGmNotes() {
-        return gmNotes;
-    }
-
-    public void setGmNotes(String gmNotes) {
-        this.gmNotes = gmNotes;
-    }
-
-    public String getIsCustom() {
-        return isCustom;
-    }
-
-    public void setIsCustom(String isCustom) {
-        this.isCustom = isCustom;
-    }
-
     @XmlTransient
-    public Collection<Creature> getCreatureCollection() {
-        return creatureCollection;
+    public Collection<ScenarioDetails> getScenarioDetailsCollection() {
+        return scenarioDetailsCollection;
     }
 
-    public void setCreatureCollection(Collection<Creature> creatureCollection) {
-        this.creatureCollection = creatureCollection;
+    public void setScenarioDetailsCollection(Collection<ScenarioDetails> scenarioDetailsCollection) {
+        this.scenarioDetailsCollection = scenarioDetailsCollection;
     }
 
     @Override

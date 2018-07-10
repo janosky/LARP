@@ -6,19 +6,22 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -30,16 +33,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Archtypes.findAll", query = "SELECT a FROM Archtypes a")
     , @NamedQuery(name = "Archtypes.findByArchytypeId", query = "SELECT a FROM Archtypes a WHERE a.archytypeId = :archytypeId")
-    ,  @NamedQuery(name = "Archtypes.findCreatureID", query = "SELECT a FROM Archtypes a WHERE a.creatureId = :creatureId")
     , @NamedQuery(name = "Archtypes.findByArchytyeClass", query = "SELECT a FROM Archtypes a WHERE a.archytyeClass = :archytyeClass")
-    , @NamedQuery(name = "Archtypes.findByHitPoints", query = "SELECT a FROM Archtypes a WHERE a.hitPoints = :hitPoints")
-    , @NamedQuery(name = "Archtypes.findByHtP", query = "SELECT a FROM Archtypes a WHERE a.htP = :htP")
-    , @NamedQuery(name = "Archtypes.findByALevel", query = "SELECT a FROM Archtypes a WHERE a.aLevel = :aLevel")
-    , @NamedQuery(name = "Archtypes.findByArmorType", query = "SELECT a FROM Archtypes a WHERE a.armorType = :armorType")
-    , @NamedQuery(name = "Archtypes.findByArmorWorn", query = "SELECT a FROM Archtypes a WHERE a.armorWorn = :armorWorn")
-    , @NamedQuery(name = "Archtypes.findByWeaponType", query = "SELECT a FROM Archtypes a WHERE a.weaponType = :weaponType")
-    , @NamedQuery(name = "Archtypes.findByDamage", query = "SELECT a FROM Archtypes a WHERE a.damage = :damage")
-    , @NamedQuery(name = "Archtypes.findByDescription", query = "SELECT a FROM Archtypes a WHERE a.description = :description")})
+    , @NamedQuery(name = "Archtypes.findByArchytypeHitPoints", query = "SELECT a FROM Archtypes a WHERE a.archytypeHitPoints = :archytypeHitPoints")
+    , @NamedQuery(name = "Archtypes.findByArchytypeHtP", query = "SELECT a FROM Archtypes a WHERE a.archytypeHtP = :archytypeHtP")
+    , @NamedQuery(name = "Archtypes.findByArchytypeArmorType", query = "SELECT a FROM Archtypes a WHERE a.archytypeArmorType = :archytypeArmorType")
+    , @NamedQuery(name = "Archtypes.findByArchytypeArmorWorn", query = "SELECT a FROM Archtypes a WHERE a.archytypeArmorWorn = :archytypeArmorWorn")
+    , @NamedQuery(name = "Archtypes.findByArchytypeWeaponType", query = "SELECT a FROM Archtypes a WHERE a.archytypeWeaponType = :archytypeWeaponType")
+    , @NamedQuery(name = "Archtypes.findByArchytypeDamage", query = "SELECT a FROM Archtypes a WHERE a.archytypeDamage = :archytypeDamage")
+    , @NamedQuery(name = "Archtypes.findByArchytypeDescription", query = "SELECT a FROM Archtypes a WHERE a.archytypeDescription = :archytypeDescription")
+    , @NamedQuery(name = "Archtypes.findByArchytypeBackground", query = "SELECT a FROM Archtypes a WHERE a.archytypeBackground = :archytypeBackground")
+    , @NamedQuery(name = "Archtypes.findByArchytypeRoleplay", query = "SELECT a FROM Archtypes a WHERE a.archytypeRoleplay = :archytypeRoleplay")})
 public class Archtypes implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,45 +52,42 @@ public class Archtypes implements Serializable {
     @Size(min = 1, max = 5)
     @Column(name = "ARCHYTYPE_ID")
     private String archytypeId;
-
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 25)
     @Column(name = "ARCHYTYE_CLASS")
     private String archytyeClass;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
-    @Column(name = "HIT_POINTS")
-    private String hitPoints;
-    @Column(name = "HT_P")
-    private Integer htP;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "A_LEVEL")
-    private int aLevel;
     @Size(max = 25)
-    @Column(name = "ARMOR_TYPE")
-    private String armorType;
+    @Column(name = "ARCHYTYPE_HIT_POINTS")
+    private String archytypeHitPoints;
+    @Column(name = "ARCHYTYPE_HT_P")
+    private Integer archytypeHtP;
     @Size(max = 25)
-    @Column(name = "ARMOR_WORN")
-    private String armorWorn;
+    @Column(name = "ARCHYTYPE_ARMOR_TYPE")
+    private String archytypeArmorType;
     @Size(max = 25)
-    @Column(name = "WEAPON_TYPE")
-    private String weaponType;
+    @Column(name = "ARCHYTYPE_ARMOR_WORN")
+    private String archytypeArmorWorn;
     @Size(max = 25)
-    @Column(name = "DAMAGE")
-    private String damage;
+    @Column(name = "ARCHYTYPE_WEAPON_TYPE")
+    private String archytypeWeaponType;
+    @Size(max = 25)
+    @Column(name = "ARCHYTYPE_DAMAGE")
+    private String archytypeDamage;
     @Size(max = 300)
-    @Column(name = "DESCRIPTION")
-    private String description;
-    @Size(max = 5)
-   // @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID")
-   @JoinColumns({
-   @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID"),
-    @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID") })
+    @Column(name = "ARCHYTYPE_DESCRIPTION")
+    private String archytypeDescription;
+    @Size(max = 300)
+    @Column(name = "ARCHYTYPE_BACKGROUND")
+    private String archytypeBackground;
+    @Size(max = 300)
+    @Column(name = "ARCHYTYPE_ROLEPLAY")
+    private String archytypeRoleplay;
+    @JoinColumn(name = "CREATURE_ID", referencedColumnName = "CREATURE_ID")
     @ManyToOne(optional = false)
     private Creature creatureId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "archytypeId")
+    private Collection<ScenarioDetails> scenarioDetailsCollection;
 
     public Archtypes() {
     }
@@ -96,11 +96,9 @@ public class Archtypes implements Serializable {
         this.archytypeId = archytypeId;
     }
 
-    public Archtypes(String archytypeId, String archytyeClass, String hitPoints, int aLevel) {
+    public Archtypes(String archytypeId, String archytyeClass) {
         this.archytypeId = archytypeId;
         this.archytyeClass = archytyeClass;
-        this.hitPoints = hitPoints;
-        this.aLevel = aLevel;
     }
 
     public String getArchytypeId() {
@@ -119,68 +117,76 @@ public class Archtypes implements Serializable {
         this.archytyeClass = archytyeClass;
     }
 
-    public String getHitPoints() {
-        return hitPoints;
+    public String getArchytypeHitPoints() {
+        return archytypeHitPoints;
     }
 
-    public void setHitPoints(String hitPoints) {
-        this.hitPoints = hitPoints;
+    public void setArchytypeHitPoints(String archytypeHitPoints) {
+        this.archytypeHitPoints = archytypeHitPoints;
     }
 
-    public Integer getHtP() {
-        return htP;
+    public Integer getArchytypeHtP() {
+        return archytypeHtP;
     }
 
-    public void setHtP(Integer htP) {
-        this.htP = htP;
+    public void setArchytypeHtP(Integer archytypeHtP) {
+        this.archytypeHtP = archytypeHtP;
     }
 
-    public int getALevel() {
-        return aLevel;
+    public String getArchytypeArmorType() {
+        return archytypeArmorType;
     }
 
-    public void setALevel(int aLevel) {
-        this.aLevel = aLevel;
+    public void setArchytypeArmorType(String archytypeArmorType) {
+        this.archytypeArmorType = archytypeArmorType;
     }
 
-    public String getArmorType() {
-        return armorType;
+    public String getArchytypeArmorWorn() {
+        return archytypeArmorWorn;
     }
 
-    public void setArmorType(String armorType) {
-        this.armorType = armorType;
+    public void setArchytypeArmorWorn(String archytypeArmorWorn) {
+        this.archytypeArmorWorn = archytypeArmorWorn;
     }
 
-    public String getArmorWorn() {
-        return armorWorn;
+    public String getArchytypeWeaponType() {
+        return archytypeWeaponType;
     }
 
-    public void setArmorWorn(String armorWorn) {
-        this.armorWorn = armorWorn;
+    public void setArchytypeWeaponType(String archytypeWeaponType) {
+        this.archytypeWeaponType = archytypeWeaponType;
     }
 
-    public String getWeaponType() {
-        return weaponType;
+    public String getArchytypeDamage() {
+        return archytypeDamage;
     }
 
-    public void setWeaponType(String weaponType) {
-        this.weaponType = weaponType;
+    public void setArchytypeDamage(String archytypeDamage) {
+        this.archytypeDamage = archytypeDamage;
     }
 
-    public String getDamage() {
-        return damage;
+    public String getArchytypeDescription() {
+        return archytypeDescription;
     }
 
-    public void setDamage(String damage) {
-        this.damage = damage;
+    public void setArchytypeDescription(String archytypeDescription) {
+        this.archytypeDescription = archytypeDescription;
     }
 
-    public String getDescription() {
-        return description;
+    public String getArchytypeBackground() {
+        return archytypeBackground;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setArchytypeBackground(String archytypeBackground) {
+        this.archytypeBackground = archytypeBackground;
+    }
+
+    public String getArchytypeRoleplay() {
+        return archytypeRoleplay;
+    }
+
+    public void setArchytypeRoleplay(String archytypeRoleplay) {
+        this.archytypeRoleplay = archytypeRoleplay;
     }
 
     public Creature getCreatureId() {
@@ -189,6 +195,15 @@ public class Archtypes implements Serializable {
 
     public void setCreatureId(Creature creatureId) {
         this.creatureId = creatureId;
+    }
+
+    @XmlTransient
+    public Collection<ScenarioDetails> getScenarioDetailsCollection() {
+        return scenarioDetailsCollection;
+    }
+
+    public void setScenarioDetailsCollection(Collection<ScenarioDetails> scenarioDetailsCollection) {
+        this.scenarioDetailsCollection = scenarioDetailsCollection;
     }
 
     @Override
